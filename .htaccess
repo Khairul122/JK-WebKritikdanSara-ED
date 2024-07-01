@@ -1,0 +1,27 @@
+# Aktifkan modul rewrite
+RewriteEngine On
+
+# Aturan untuk menghapus www dari URL
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ http://%1%{REQUEST_URI} [L,R=301]
+
+# Aturan untuk memaksa HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Aturan untuk mengarahkan semua permintaan ke index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Setel karakter set default ke UTF-8
+AddDefaultCharset UTF-8
+
+# Mencegah akses langsung ke file .htaccess dan .htpasswd
+<FilesMatch "\.(htaccess|htpasswd)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Mencegah penampilan daftar isi direktori
+Options -Indexes
